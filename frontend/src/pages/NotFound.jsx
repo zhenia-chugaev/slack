@@ -1,3 +1,3 @@
-const NotFound = () => <p><b>This page doesn't exist</b></p>;
+const NotFound = () => <p><b>This page does not exist</b></p>;
 
 export default NotFound;

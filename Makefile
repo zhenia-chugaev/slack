@@ -16,3 +16,6 @@ dev-client:
 
 check:
 	npm run lint -w frontend
+
+fix:
+	npm run lint:fix -w frontend

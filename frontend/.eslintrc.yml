@@ -5,6 +5,7 @@ extends:
   - react-app
   - airbnb
   - plugin:react/recommended
+  - plugin:react/jsx-runtime
   - plugin:functional/recommended
   - plugin:functional/disable-type-checked
 overrides: []
@@ -14,4 +15,6 @@ parserOptions:
 plugins:
   - react
   - functional
-rules: {}
+rules:
+  react/function-component-definition: [error, { namedComponents: arrow-function }]
+  functional/functional-parameters: [error, { enforceParameterCount: false }]
