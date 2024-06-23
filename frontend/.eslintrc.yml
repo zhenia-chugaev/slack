@@ -1,0 +1,17 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - react-app
+  - airbnb
+  - plugin:react/recommended
+  - plugin:functional/recommended
+  - plugin:functional/disable-type-checked
+overrides: []
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - react
+  - functional
+rules: {}

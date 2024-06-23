@@ -13,3 +13,6 @@ dev-server:
 
 dev-client:
 	npm run start -w frontend
+
+check:
+	npm run lint -w frontend

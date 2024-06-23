@@ -11,16 +11,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "lint": "eslint src/**/*.{js,jsx}",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5001",
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -32,5 +28,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-functional": "^6.6.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2"
   }
 }
