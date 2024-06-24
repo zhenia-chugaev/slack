@@ -13,3 +13,9 @@ dev-server:
 
 dev-client:
 	npm run start -w frontend
+
+check:
+	npm run lint -w frontend
+
+fix:
+	npm run lint:fix -w frontend
