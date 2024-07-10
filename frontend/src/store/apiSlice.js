@@ -1,9 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { storage } from '../constants';
 
-const prepareHeaders = (headers) => {
-  const stringOrNull = localStorage.getItem(storage.auth());
-  const { token } = JSON.parse(stringOrNull) || {};
+const prepareHeaders = (headers, { getState }) => {
+  const { auth: { data: { token } } } = getState();
 
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
