@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
+import { routes, storage } from '../constants';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ const Login = () => {
 
   const onSubmit = async (credentials) => {
     const { data } = await axios.post('/api/v1/login', credentials);
-    localStorage.setItem('auth', JSON.stringify(data));
-    navigate('/');
+    localStorage.setItem(storage.auth(), JSON.stringify(data));
+    navigate(routes.root());
   };
 
   return (
@@ -61,7 +62,7 @@ const Login = () => {
               <p className="m-0 text-center">
                 <span>Нет аккаунта?</span>
                 {' '}
-                <Link to="/signup">Регистрация</Link>
+                <Link to={routes.signup()}>Регистрация</Link>
               </p>
             </div>
           </Col>
