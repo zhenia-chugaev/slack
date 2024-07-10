@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form as FormikForm, Field } from 'formik';
+import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -8,12 +9,18 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const initialValues = {
     username: '',
     password: '',
   };
 
-  const onSubmit = (values) => console.log(values);
+  const onSubmit = async (credentials) => {
+    const { data } = await axios.post('/api/v1/login', credentials);
+    localStorage.setItem('auth', JSON.stringify(data));
+    navigate('/');
+  };
 
   return (
     <Row className="h-100 justify-content-center align-content-center">
