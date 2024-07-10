@@ -16,5 +16,6 @@ plugins:
   - react
   - functional
 rules:
+  object-curly-newline: [error, { ImportDeclaration: { minProperties: 5 } }]
   react/function-component-definition: [error, { namedComponents: arrow-function }]
   functional/functional-parameters: [error, { enforceParameterCount: false }]
