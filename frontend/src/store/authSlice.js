@@ -10,6 +10,11 @@ const initialState = { data };
 const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    clearAuthData: (auth) => {
+      auth.data = {};
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       apiSlice.endpoints.login.matchFulfilled,
@@ -23,5 +28,6 @@ const authSlice = createSlice({
   },
 });
 
+export const { clearAuthData } = authSlice.actions;
 export const { selectAuthData } = authSlice.selectors;
 export default authSlice;
