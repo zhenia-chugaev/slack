@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
+import { useLoginMutation } from '../store/apiSlice';
 import { routes, storage } from '../constants';
 
 const errorMessages = {
@@ -17,6 +17,7 @@ const mapStatusCodeToMessage = (statusCode) => {
 };
 
 const LoginForm = () => {
+  const [login] = useLoginMutation();
   const navigate = useNavigate();
 
   const initialValues = {
@@ -35,11 +36,12 @@ const LoginForm = () => {
 
   const onSubmit = async (credentials, { setStatus }) => {
     try {
-      const { data } = await axios.post('/api/v1/login', credentials);
+      const data = await login(credentials).unwrap();
       localStorage.setItem(storage.auth(), JSON.stringify(data));
       navigate(routes.root());
     } catch (err) {
-      setStatus({ code: err.response?.status });
+      const code = err.originalStatus || err.status;
+      setStatus({ code });
     }
   };
 
