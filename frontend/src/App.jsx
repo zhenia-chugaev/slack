@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Main, Login, NotFound } from './pages';
-import './App.css';
 
 const App = () => (
   <BrowserRouter>
