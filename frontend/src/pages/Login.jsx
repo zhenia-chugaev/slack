@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Formik, Form as FormikForm, Field } from 'formik';
+import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
+import { object, string } from 'yup';
 import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,6 +10,15 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import { routes, storage } from '../constants';
 
+const errorMessages = {
+  401: 'Неверный никнейм и/или пароль',
+};
+
+const mapStatusCodeToMessage = (statusCode) => {
+  const defaultMessage = 'Произошла ошибка. Попробуйте снова';
+  return errorMessages[statusCode] || defaultMessage;
+};
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -17,10 +27,23 @@ const Login = () => {
     password: '',
   };
 
-  const onSubmit = async (credentials) => {
-    const { data } = await axios.post('/api/v1/login', credentials);
-    localStorage.setItem(storage.auth(), JSON.stringify(data));
-    navigate(routes.root());
+  const validationSchema = object({
+    username: string()
+      .trim()
+      .required("Поле 'никнейм' является обязательным"),
+    password: string()
+      .trim()
+      .required("Поле 'пароль' является обязательным"),
+  });
+
+  const onSubmit = async (credentials, { setStatus }) => {
+    try {
+      const { data } = await axios.post('/api/v1/login', credentials);
+      localStorage.setItem(storage.auth(), JSON.stringify(data));
+      navigate(routes.root());
+    } catch (err) {
+      setStatus({ code: err.response?.status });
+    }
   };
 
   return (
@@ -32,29 +55,50 @@ const Login = () => {
           </Col>
           <Col className="p-5">
             <h2 className="mb-3 h1 text-center">Войти</h2>
-            <Formik initialValues={initialValues} onSubmit={onSubmit}>
-              <FormikForm className="d-grid gap-2">
-                <FloatingLabel controlId="username" label="Ваш ник">
-                  <Form.Control
-                    as={Field}
-                    type="text"
-                    name="username"
-                    placeholder="bob"
-                    autoFocus
-                    required
-                  />
-                </FloatingLabel>
-                <FloatingLabel controlId="password" label="Пароль">
-                  <Form.Control
-                    as={Field}
-                    type="password"
-                    name="password"
-                    placeholder="pass"
-                    required
-                  />
-                </FloatingLabel>
-                <Button type="submit" variant="outline-primary" size="lg">Войти</Button>
-              </FormikForm>
+            <Formik
+              initialValues={initialValues}
+              initialStatus={{}}
+              validationSchema={validationSchema}
+              validateOnChange={false}
+              validateOnBlur={false}
+              onSubmit={onSubmit}
+            >
+              {({ errors, touched, isSubmitting, status }) => (
+                <FormikForm className="d-grid gap-2" noValidate>
+                  <FloatingLabel controlId="username" label="Ваш ник">
+                    <Form.Control
+                      as={Field}
+                      type="text"
+                      name="username"
+                      placeholder="bob"
+                      isInvalid={touched.username && errors.username}
+                      autoFocus
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel controlId="password" label="Пароль">
+                    <Form.Control
+                      as={Field}
+                      type="password"
+                      name="password"
+                      placeholder="pass"
+                      isInvalid={touched.password && errors.password}
+                    />
+                  </FloatingLabel>
+                  <Button type="submit" variant="outline-primary" size="lg" disabled={isSubmitting}>
+                    Войти
+                  </Button>
+                  <div className="position-relative">
+                    <div className="position-absolute small text-danger">
+                      {status.code && (
+                        <p className="m-0">{mapStatusCodeToMessage(status.code)}</p>
+                      )}
+                      {Object.keys(errors).map((name) => (
+                        <ErrorMessage className="m-0" component="p" name={name} key={name} />
+                      ))}
+                    </div>
+                  </div>
+                </FormikForm>
+              )}
             </Formik>
           </Col>
           <Col className="border-top border-secondary-subtle bg-secondary bg-opacity-10" lg={12}>
