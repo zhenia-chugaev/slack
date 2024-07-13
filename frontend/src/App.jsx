@@ -9,10 +9,7 @@ import { selectAuthData, clearAuthData } from './store/authSlice';
 import { Main, Login, NotFound } from './pages';
 import { routes, storage } from './constants';
 
-const Private = () => {
-  const { token } = useSelector(selectAuthData);
-  return token ? <Outlet /> : <Navigate to={routes.login()} />;
-};
+const Private = ({ token }) => (token ? <Outlet /> : <Navigate to={routes.login()} />);
 
 const App = () => {
   const { token } = useSelector(selectAuthData);
@@ -37,7 +34,7 @@ const App = () => {
         <main className="flex-grow-1 bg-light">
           <Container className="h-100">
             <Routes>
-              <Route element={<Private />}>
+              <Route element={<Private token={token} />}>
                 <Route path={routes.root()} element={<Main />} />
               </Route>
               <Route path={routes.login()} element={<Login />} />
