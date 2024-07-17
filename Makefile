@@ -1,17 +1,14 @@
 install:
-	npm ci
+	npm ci --ignore-scripts
 
-build:
+build: install
 	rm -rf frontend/build
 	npm run build -w frontend
 
-start: build
+start:
 	npx start-server -s frontend/build
 
-dev-server:
-	npx start-server
-
-dev-client:
+dev:
 	npm run start -w frontend
 
 check:
