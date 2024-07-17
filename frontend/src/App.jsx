@@ -34,7 +34,7 @@ const App = () => {
             </Navbar>
           </Container>
         </header>
-        <main className="flex-grow-1 bg-light">
+        <main className="flex-grow-1 bg-light overflow-y-hidden">
           <Container className="h-100">
             <Routes>
               <Route element={<Private token={token} />}>

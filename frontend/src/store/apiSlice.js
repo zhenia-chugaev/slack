@@ -23,8 +23,14 @@ const apiSlice = createApi({
         body: credentials,
       }),
     }),
+    getChannels: builder.query({
+      query: () => '/channels',
+    }),
+    getMessages: builder.query({
+      query: () => '/messages',
+    }),
   }),
 });
 
-export const { useLoginMutation } = apiSlice;
+export const { useLoginMutation, useGetChannelsQuery, useGetMessagesQuery } = apiSlice;
 export default apiSlice;
