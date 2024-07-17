@@ -10,6 +10,7 @@ import { Main, Login, NotFound } from './pages';
 import { routes, storage } from './constants';
 
 const Private = ({ token }) => (token ? <Outlet /> : <Navigate to={routes.login()} />);
+const Protected = ({ token }) => (token ? <Navigate to={routes.root()} /> : <Outlet />);
 
 const App = () => {
   const { token } = useSelector(selectAuthData);
@@ -39,7 +40,11 @@ const App = () => {
               <Route element={<Private token={token} />}>
                 <Route path={routes.root()} element={<Main />} />
               </Route>
-              <Route path={routes.login()} element={<Login />} />
+
+              <Route element={<Protected token={token} />}>
+                <Route path={routes.login()} element={<Login />} />
+              </Route>
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Container>
