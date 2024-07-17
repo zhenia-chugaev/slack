@@ -26,7 +26,9 @@ const App = () => {
         <header className="z-1 shadow-sm">
           <Container>
             <Navbar>
-              <Navbar.Brand as={Link} to={routes.root()}>Slack</Navbar.Brand>
+              <Navbar.Brand as={Link} to={routes.root()}>
+                <h1 style={{ all: 'unset' }}>Slack</h1>
+              </Navbar.Brand>
               {token && <Button className="ms-auto" onClick={logOut}>Выйти</Button>}
             </Navbar>
           </Container>
