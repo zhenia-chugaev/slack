@@ -14,6 +14,12 @@ overrides: [
     rules: {
       no-param-reassign: off,
     },
+  },
+  {
+    files: ['src/components/ErrorBoundary.jsx'],
+    rules: {
+      functional/no-classes: off,
+    }
   }
 ]
 parserOptions:
