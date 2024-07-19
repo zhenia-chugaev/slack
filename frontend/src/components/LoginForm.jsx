@@ -4,8 +4,8 @@ import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import { useLoginMutation } from '../store/apiSlice';
-import { routes, storage } from '../constants';
+import { useLoginMutation } from '#store/apiSlice';
+import { routes, storage } from '#constants';
 
 const errorMessages = {
   401: 'Неверный никнейм и/или пароль',

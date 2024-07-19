@@ -29,6 +29,8 @@ plugins:
   - react
   - functional
 rules:
+  import/no-unresolved: [error, { ignore: ['^#'] }]
+  import/extensions: [error, never]
   object-curly-newline: [error, { ImportDeclaration: { minProperties: 5 } }]
   react/function-component-definition: [error, { namedComponents: arrow-function }]
   react/prop-types: off

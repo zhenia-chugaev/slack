@@ -28,6 +28,13 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
+  "imports": {
+    "#store": "./src/store",
+    "#store/*": "./src/store/*",
+    "#pages": "./src/pages",
+    "#components": "./src/components",
+    "#constants": "./src/constants"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

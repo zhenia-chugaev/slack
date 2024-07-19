@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
-import { useGetMessagesQuery } from '../store/apiSlice';
+import { useGetMessagesQuery } from '#store/apiSlice';
 
 const getMessagesNoun = (count) => {
   switch (![11, 12, 13, 14].includes(count % 100) && count % 10) {
