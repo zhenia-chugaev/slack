@@ -15,7 +15,7 @@ const Main = () => {
   if (isLoading) {
     return (
       <div className="h-100 d-flex justify-content-center align-items-center">
-        <Spinner animation="border" variant="primary">
+        <Spinner animation="border" variant="primary" role="status">
           <span className="visually-hidden">Загрузка...</span>
         </Spinner>
       </div>
