@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import { LoginForm } from '../components';
-import { routes } from '../constants';
+import { LoginForm } from '#components';
+import { routes } from '#constants';
 
 const Login = () => (
   <Row className="h-100 justify-content-center align-content-center">

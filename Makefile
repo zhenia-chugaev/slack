@@ -1,7 +1,8 @@
 install:
-	npm ci --ignore-scripts
+	npm install
 
-build: install
+build:
+	npm ci --ignore-scripts
 	rm -rf frontend/build
 	npm run build -w frontend
 
