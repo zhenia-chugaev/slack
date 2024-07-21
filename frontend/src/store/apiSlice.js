@@ -1,13 +1,31 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { io } from 'socket.io-client';
 
 const prepareHeaders = (headers, { getState }) => {
   const { auth: { data: { token } } } = getState();
-
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
-
   return headers;
+};
+
+const subscribeToNewMessages = async (_, {
+  cacheDataLoaded,
+  cacheEntryRemoved,
+  updateCachedData,
+}) => {
+  const socket = io();
+  try {
+    await cacheDataLoaded;
+    socket.on('newMessage', (newMessage) => {
+      updateCachedData((messages) => {
+        messages.push(newMessage);
+      });
+    });
+  } finally {
+    await cacheEntryRemoved;
+    socket.close();
+  }
 };
 
 const apiSlice = createApi({
@@ -28,7 +46,7 @@ const apiSlice = createApi({
     }),
     getMessages: builder.query({
       query: () => '/messages',
-      providesTags: ['Msg'],
+      onCacheEntryAdded: subscribeToNewMessages,
     }),
     addMessage: builder.mutation({
       query: (message) => ({
@@ -36,7 +54,6 @@ const apiSlice = createApi({
         url: '/messages',
         body: message,
       }),
-      invalidatesTags: ['Msg'],
     }),
   }),
 });
