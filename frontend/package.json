@@ -33,7 +33,8 @@
     "#store/*": "./src/store/*",
     "#pages": "./src/pages",
     "#components": "./src/components",
-    "#constants": "./src/constants"
+    "#constants": "./src/constants",
+    "#utils": "./src/utils"
   },
   "browserslist": {
     "production": [

@@ -28,9 +28,24 @@ const apiSlice = createApi({
     }),
     getMessages: builder.query({
       query: () => '/messages',
+      providesTags: ['Msg'],
+    }),
+    addMessage: builder.mutation({
+      query: (message) => ({
+        method: 'POST',
+        url: '/messages',
+        body: message,
+      }),
+      invalidatesTags: ['Msg'],
     }),
   }),
 });
 
-export const { useLoginMutation, useGetChannelsQuery, useGetMessagesQuery } = apiSlice;
+export const {
+  useLoginMutation,
+  useGetChannelsQuery,
+  useGetMessagesQuery,
+  useAddMessageMutation,
+} = apiSlice;
+
 export default apiSlice;
