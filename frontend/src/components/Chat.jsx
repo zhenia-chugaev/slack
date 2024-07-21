@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-import { ArrowRightSquare } from 'react-bootstrap-icons';
-import { useGetMessagesQuery } from '../store/apiSlice';
+import { useGetMessagesQuery } from '#store/apiSlice';
+import { NewMessageForm } from '#components';
 
 const getMessagesNoun = (count) => {
   switch (![11, 12, 13, 14].includes(count % 100) && count % 10) {
@@ -26,7 +23,7 @@ const Chat = ({ channel }) => {
     (messages, channelId) => messages?.filter((msg) => msg.channelId === channelId) || [],
   ), []);
 
-  const { messages } = useGetMessagesQuery(null, {
+  const { messages } = useGetMessagesQuery(undefined, {
     selectFromResult: (result) => ({
       ...result,
       messages: selectMessagesByChannel(result, channel.id),
@@ -51,27 +48,7 @@ const Chat = ({ channel }) => {
             </blockquote>
           ))}
         </div>
-        <Form className="py-3 px-5">
-          <Form.Group controlId="message">
-            <Form.Label className="visually-hidden">Новое сообщение</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type="text"
-                name="message"
-                placeholder="Введите сообщение..."
-                autoFocus
-              />
-              <Button
-                className="d-flex align-items-center bg-light"
-                type="submit"
-                variant="outline-secondary"
-                disabled
-              >
-                <ArrowRightSquare color="black" size={20} />
-              </Button>
-            </InputGroup>
-          </Form.Group>
-        </Form>
+        <NewMessageForm channelId={channel.id} />
       </div>
     </div>
   );

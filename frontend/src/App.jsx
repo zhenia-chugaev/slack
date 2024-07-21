@@ -5,10 +5,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import { selectAuthData, clearAuthData } from './store/authSlice';
-import { Main, Login, NotFound } from './pages';
-import { ErrorBoundary } from './components';
-import { routes, storage } from './constants';
+import { selectAuthData, clearAuthData } from '#store/authSlice';
+import { Main, Login, NotFound } from '#pages';
+import { ErrorBoundary } from '#components';
+import { routes, storage } from '#constants';
 
 const Private = ({ token }) => (token ? <Outlet /> : <Navigate to={routes.login()} />);
 const Protected = ({ token }) => (token ? <Navigate to={routes.root()} /> : <Outlet />);

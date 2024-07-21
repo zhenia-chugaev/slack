@@ -5,8 +5,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
-import { Chat } from '../components';
-import { useGetChannelsQuery } from '../store/apiSlice';
+import { Chat } from '#components';
+import { useGetChannelsQuery } from '#store/apiSlice';
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
@@ -15,7 +15,7 @@ const Main = () => {
   if (isLoading) {
     return (
       <div className="h-100 d-flex justify-content-center align-items-center">
-        <Spinner animation="border" variant="primary">
+        <Spinner animation="border" variant="primary" role="status">
           <span className="visually-hidden">Загрузка...</span>
         </Spinner>
       </div>

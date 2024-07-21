@@ -4,17 +4,9 @@ import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import { useLoginMutation } from '../store/apiSlice';
-import { routes, storage } from '../constants';
-
-const errorMessages = {
-  401: 'Неверный никнейм и/или пароль',
-};
-
-const mapStatusCodeToMessage = (statusCode) => {
-  const defaultMessage = 'Произошла ошибка. Попробуйте снова';
-  return errorMessages[statusCode] || defaultMessage;
-};
+import { useLoginMutation } from '#store/apiSlice';
+import { mapStatusCodeToMessage } from '#utils';
+import { routes, storage } from '#constants';
 
 const LoginForm = () => {
   const [login] = useLoginMutation();

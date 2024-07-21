@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { storage } from '../constants';
+import { storage } from '#constants';
 import apiSlice from './apiSlice';
 
 const stringOrNull = localStorage.getItem(storage.auth());
