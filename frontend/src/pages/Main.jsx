@@ -85,7 +85,13 @@ const Main = () => {
         </Row>
       </Tab.Container>
 
-      <Modal show={channelsStatus !== 'idle'} onHide={closeModal} centered>
+      <Modal
+        show={channelsStatus !== 'idle'}
+        onHide={closeModal}
+        enforceFocus={false}
+        restoreFocus={false}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Добавить канал</Modal.Title>
         </Modal.Header>
