@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
+import { AddChannelForm } from '#components/forms';
 import { useGetChannelsQuery } from '#store/apiSlice';
 
 const Main = () => {
@@ -31,6 +32,10 @@ const Main = () => {
 
   const closeModal = () => {
     setChannelsStatus('idle');
+  };
+
+  const switchChannel = (id) => {
+    setActiveChannel(id);
   };
 
   const shouldChannelBeHighlighted = (channelId, index) => (
@@ -84,7 +89,9 @@ const Main = () => {
         <Modal.Header closeButton>
           <Modal.Title>Добавить канал</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Form</Modal.Body>
+        <Modal.Body>
+          <AddChannelForm switchChannel={switchChannel} closeModal={closeModal} />
+        </Modal.Body>
       </Modal>
     </div>
   );
