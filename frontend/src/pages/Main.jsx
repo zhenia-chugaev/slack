@@ -6,6 +6,8 @@ import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
 import { AddChannelForm } from '#components/forms';
@@ -13,7 +15,7 @@ import { useGetChannelsQuery } from '#store/apiSlice';
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
-  const [channelsStatus, setChannelsStatus] = useState('idle');
+  const [channelsMode, setChannelsMode] = useState('idle');
   const [activeChannel, setActiveChannel] = useState();
 
   if (isLoading) {
@@ -26,12 +28,12 @@ const Main = () => {
     );
   }
 
-  const openModal = () => {
-    setChannelsStatus('addition');
+  const openModal = (mode) => {
+    setChannelsMode(mode);
   };
 
   const closeModal = () => {
-    setChannelsStatus('idle');
+    setChannelsMode('idle');
   };
 
   const switchChannel = (id) => {
@@ -55,20 +57,52 @@ const Main = () => {
           <Col as="section" className="h-100 border-end bg-light" lg={2}>
             <div className="d-flex justify-content-between align-items-center py-4 ps-2">
               <h2 className="m-0 fs-6">Каналы</h2>
-              <Button className="p-0 lh-1" variant="link" type="button" onClick={openModal}>
+              <Button
+                className="p-0 lh-1"
+                variant="link"
+                type="button"
+                onClick={() => openModal('addition')}
+              >
                 <PlusSquare size={20} />
               </Button>
             </div>
             <Nav as="ul" className="flex-column">
               {channels.map((channel, i) => (
                 <Nav.Item as="li" key={channel.id}>
-                  <Button
-                    className="w-100 text-start rounded-0"
-                    variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : null}
-                    onClick={() => setActiveChannel(channel.id)}
-                  >
-                    {`# ${channel.name}`}
-                  </Button>
+                  {channel.removable
+                    ? (
+                      <Dropdown as={ButtonGroup} className="w-100" align="end">
+                        <Button
+                          className="w-100 text-start rounded-0"
+                          variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
+                          onClick={() => setActiveChannel(channel.id)}
+                        >
+                          {`# ${channel.name}`}
+                        </Button>
+                        <Dropdown.Toggle
+                          id={`${channel.name}-dropdown-toggle`}
+                          variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
+                          split
+                        />
+                        <Dropdown.Menu>
+                          <Dropdown.Item onClick={() => openModal('removal')}>
+                            Удалить
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => openModal('edition')}>
+                            Переименовать
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    )
+                    : (
+                      <Button
+                        className="w-100 text-start rounded-0"
+                        variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
+                        onClick={() => setActiveChannel(channel.id)}
+                      >
+                        {`# ${channel.name}`}
+                      </Button>
+                    )}
                 </Nav.Item>
               ))}
             </Nav>
@@ -86,7 +120,7 @@ const Main = () => {
       </Tab.Container>
 
       <Modal
-        show={channelsStatus !== 'idle'}
+        show={channelsMode !== 'idle'}
         onHide={closeModal}
         enforceFocus={false}
         restoreFocus={false}
