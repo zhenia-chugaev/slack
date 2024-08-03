@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useAddChannelMutation } from '#store/apiSlice';
 import { mapStatusCodeToMessage } from '#utils';
 
-const AddChannelForm = ({ switchChannel, closeModal }) => {
+const AddChannelForm = ({ onSuccess, onReset }) => {
   const { data: channels } = useGetChannelsQuery();
   const [addChannel] = useAddChannelMutation();
 
@@ -30,9 +30,8 @@ const AddChannelForm = ({ switchChannel, closeModal }) => {
 
   const onSubmit = async (channel, { setStatus }) => {
     try {
-      const { id } = await addChannel(channel).unwrap();
-      switchChannel(id);
-      closeModal();
+      const result = await addChannel(channel).unwrap();
+      onSuccess(result);
     } catch (err) {
       const code = err.originalStatus || err.status;
       setStatus({ code });
@@ -49,7 +48,7 @@ const AddChannelForm = ({ switchChannel, closeModal }) => {
       onSubmit={onSubmit}
     >
       {({ errors, touched, isSubmitting, status }) => (
-        <FormikForm onReset={closeModal} noValidate>
+        <FormikForm onReset={onReset} noValidate>
           <Form.Group className="mb-2" controlId="channelName">
             <Form.Label className="visually-hidden">Channel name</Form.Label>
             <Form.Control

@@ -4,14 +4,20 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
-import { AddChannelForm } from '#components/forms';
+import { AddChannelModal } from '#components/modals';
 import { useGetChannelsQuery } from '#store/apiSlice';
+
+const VoidComponent = () => {};
+
+const modals = {
+  addition: AddChannelModal,
+  idle: VoidComponent,
+};
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
@@ -27,6 +33,8 @@ const Main = () => {
       </div>
     );
   }
+
+  const Modal = modals[channelsMode];
 
   const openModal = (mode) => {
     setChannelsMode(mode);
@@ -119,20 +127,7 @@ const Main = () => {
         </Row>
       </Tab.Container>
 
-      <Modal
-        show={channelsMode !== 'idle'}
-        onHide={closeModal}
-        enforceFocus={false}
-        restoreFocus={false}
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Добавить канал</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <AddChannelForm switchChannel={switchChannel} closeModal={closeModal} />
-        </Modal.Body>
-      </Modal>
+      <Modal switchChannel={switchChannel} closeModal={closeModal} />
     </div>
   );
 };
