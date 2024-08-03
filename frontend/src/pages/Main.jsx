@@ -9,20 +9,22 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
-import { AddChannelModal } from '#components/modals';
+import { AddChannelModal, RemoveChannelModal } from '#components/modals';
 import { useGetChannelsQuery } from '#store/apiSlice';
 
 const VoidComponent = () => {};
 
 const modals = {
   addition: AddChannelModal,
+  removal: RemoveChannelModal,
   idle: VoidComponent,
 };
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
   const [channelsMode, setChannelsMode] = useState('idle');
-  const [activeChannel, setActiveChannel] = useState();
+  const [activeChannel, setActiveChannel] = useState('');
+  const [channelInProgress, setChannelInProgress] = useState('');
 
   if (isLoading) {
     return (
@@ -36,29 +38,28 @@ const Main = () => {
 
   const Modal = modals[channelsMode];
 
-  const openModal = (mode) => {
+  const openModal = (mode, channelId = '') => {
     setChannelsMode(mode);
+    setChannelInProgress(channelId);
   };
 
   const closeModal = () => {
     setChannelsMode('idle');
   };
 
-  const switchChannel = (id) => {
-    setActiveChannel(id);
-  };
-
   const shouldChannelBeHighlighted = (channelId, index) => (
     (channelId === activeChannel) || (!activeChannel && index === 0)
   );
+
+  const defaultChannel = channels[0]?.id;
 
   return (
     <div className="h-100 py-4">
       <Tab.Container
         id="channels"
         transition={false}
-        activeKey={activeChannel}
-        defaultActiveKey={channels[0]?.id}
+        activeKey={activeChannel || defaultChannel}
+        defaultActiveKey={defaultChannel}
         unmountOnExit
       >
         <Row className="h-100 shadow">
@@ -93,7 +94,7 @@ const Main = () => {
                           split
                         />
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => openModal('removal')}>
+                          <Dropdown.Item onClick={() => openModal('removal', channel.id)}>
                             Удалить
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => openModal('edition')}>
@@ -127,7 +128,11 @@ const Main = () => {
         </Row>
       </Tab.Container>
 
-      <Modal switchChannel={switchChannel} closeModal={closeModal} />
+      <Modal
+        channelId={channelInProgress}
+        setActiveChannel={setActiveChannel}
+        closeModal={closeModal}
+      />
     </div>
   );
 };

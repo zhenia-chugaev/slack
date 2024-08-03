@@ -1,9 +1,9 @@
 import Modal from 'react-bootstrap/Modal';
 import { AddChannelForm } from '#components/forms';
 
-const AddChannelModal = ({ switchChannel, closeModal }) => {
+const AddChannelModal = ({ setActiveChannel, closeModal }) => {
   const onSuccess = (channel) => {
-    switchChannel(channel.id);
+    setActiveChannel(channel.id);
     closeModal();
   };
 
