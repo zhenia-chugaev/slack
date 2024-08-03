@@ -10,7 +10,7 @@ extends:
   - plugin:functional/disable-type-checked
 overrides: [
   {
-    files: ['src/store/authSlice.js'],
+    files: ['src/store/{auth,channels}Slice.js'],
     rules: {
       no-param-reassign: off,
     },

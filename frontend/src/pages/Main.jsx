@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
@@ -11,6 +11,14 @@ import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
 import { AddChannelModal, RemoveChannelModal } from '#components/modals';
 import { useGetChannelsQuery } from '#store/apiSlice';
+import * as channelsSlice from '#store/channelsSlice';
+
+const {
+  selectChannelsInfo,
+  setChannelsStatus,
+  setActiveChannel,
+  setChannelInProgress,
+} = channelsSlice;
 
 const VoidComponent = () => {};
 
@@ -22,9 +30,8 @@ const modals = {
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
-  const [channelsMode, setChannelsMode] = useState('idle');
-  const [activeChannel, setActiveChannel] = useState('');
-  const [channelInProgress, setChannelInProgress] = useState('');
+  const { activeChannel, status } = useSelector(selectChannelsInfo);
+  const dispatch = useDispatch();
 
   if (isLoading) {
     return (
@@ -36,15 +43,19 @@ const Main = () => {
     );
   }
 
-  const Modal = modals[channelsMode];
+  const Modal = modals[status];
 
   const openModal = (mode, channelId = '') => {
-    setChannelsMode(mode);
-    setChannelInProgress(channelId);
+    dispatch(setChannelsStatus(mode));
+    dispatch(setChannelInProgress(channelId));
   };
 
   const closeModal = () => {
-    setChannelsMode('idle');
+    dispatch(setChannelsStatus('idle'));
+  };
+
+  const switchChannel = (channelId) => {
+    dispatch(setActiveChannel(channelId));
   };
 
   const shouldChannelBeHighlighted = (channelId, index) => (
@@ -84,7 +95,7 @@ const Main = () => {
                         <Button
                           className="w-100 text-start rounded-0"
                           variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
-                          onClick={() => setActiveChannel(channel.id)}
+                          onClick={() => switchChannel(channel.id)}
                         >
                           {`# ${channel.name}`}
                         </Button>
@@ -107,7 +118,7 @@ const Main = () => {
                       <Button
                         className="w-100 text-start rounded-0"
                         variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
-                        onClick={() => setActiveChannel(channel.id)}
+                        onClick={() => switchChannel(channel.id)}
                       >
                         {`# ${channel.name}`}
                       </Button>
@@ -128,11 +139,7 @@ const Main = () => {
         </Row>
       </Tab.Container>
 
-      <Modal
-        channelId={channelInProgress}
-        setActiveChannel={setActiveChannel}
-        closeModal={closeModal}
-      />
+      <Modal switchChannel={switchChannel} closeModal={closeModal} />
     </div>
   );
 };

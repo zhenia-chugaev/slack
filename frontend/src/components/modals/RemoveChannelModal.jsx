@@ -1,9 +1,13 @@
+import { useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
+import { selectChannelsInfo } from '#store/channelsSlice';
 import { RemoveChannelForm } from '#components/forms';
 
-const RemoveChannelModal = ({ channelId, setActiveChannel, closeModal }) => {
+const RemoveChannelModal = ({ switchChannel, closeModal }) => {
+  const { channelInProgress } = useSelector(selectChannelsInfo);
+
   const onSuccess = () => {
-    setActiveChannel('');
+    switchChannel('');
     closeModal();
   };
 
@@ -15,7 +19,7 @@ const RemoveChannelModal = ({ channelId, setActiveChannel, closeModal }) => {
       <Modal.Body>
         <p className="lead mb-0">Уверены?</p>
         <RemoveChannelForm
-          channelId={channelId}
+          channelId={channelInProgress}
           onSuccess={onSuccess}
           onReset={closeModal}
         />
