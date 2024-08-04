@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { io } from 'socket.io-client';
+import { setActiveChannel } from './channelsSlice';
 
 const prepareHeaders = (headers, { getState }) => {
   const { auth: { data: { token } } } = getState();
@@ -10,6 +11,8 @@ const prepareHeaders = (headers, { getState }) => {
 };
 
 const subscribeToChannelsUpdates = async (_, {
+  dispatch,
+  getState,
   cacheDataLoaded,
   cacheEntryRemoved,
   updateCachedData,
@@ -27,6 +30,9 @@ const subscribeToChannelsUpdates = async (_, {
         updateCachedData((channels) => (
           channels.filter((channel) => channel.id !== id)
         ));
+        if (id === getState().channels.activeChannel) {
+          dispatch(setActiveChannel(''));
+        }
       })
       .on('renameChannel', (renamedChannel) => {
         updateCachedData((channels) => (

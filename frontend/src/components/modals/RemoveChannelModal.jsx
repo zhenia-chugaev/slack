@@ -3,16 +3,17 @@ import Modal from 'react-bootstrap/Modal';
 import { selectChannelsInfo } from '#store/channelsSlice';
 import { RemoveChannelForm } from '#components/forms';
 
-const RemoveChannelModal = ({ switchChannel, closeModal }) => {
+const RemoveChannelModal = ({ closeModal }) => {
   const { channelInProgress } = useSelector(selectChannelsInfo);
 
-  const onSuccess = () => {
-    switchChannel('');
-    closeModal();
-  };
-
   return (
-    <Modal onHide={closeModal} centered show>
+    <Modal
+      enforceFocus={false}
+      restoreFocus={false}
+      onHide={closeModal}
+      centered
+      show
+    >
       <Modal.Header closeButton>
         <Modal.Title>Удалить канал</Modal.Title>
       </Modal.Header>
@@ -20,7 +21,7 @@ const RemoveChannelModal = ({ switchChannel, closeModal }) => {
         <p className="lead mb-0">Уверены?</p>
         <RemoveChannelForm
           channelId={channelInProgress}
-          onSuccess={onSuccess}
+          onSuccess={closeModal}
           onReset={closeModal}
         />
       </Modal.Body>
