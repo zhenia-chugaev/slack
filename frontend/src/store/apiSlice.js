@@ -91,7 +91,7 @@ const apiSlice = createApi({
       }),
     }),
     editChannel: builder.mutation({
-      query: (id, changes) => ({
+      query: ({ id, changes }) => ({
         method: 'PATCH',
         url: `/channels/${id}`,
         body: changes,

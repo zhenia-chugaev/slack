@@ -9,7 +9,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
-import { AddChannelModal, RemoveChannelModal } from '#components/modals';
+import { AddChannelModal, RemoveChannelModal, EditChannelModal } from '#components/modals';
 import { useGetChannelsQuery } from '#store/apiSlice';
 import * as channelsSlice from '#store/channelsSlice';
 
@@ -25,6 +25,7 @@ const VoidComponent = () => {};
 const modals = {
   addition: AddChannelModal,
   removal: RemoveChannelModal,
+  edition: EditChannelModal,
   idle: VoidComponent,
 };
 
@@ -108,7 +109,7 @@ const Main = () => {
                           <Dropdown.Item onClick={() => openModal('removal', channel.id)}>
                             Удалить
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => openModal('edition')}>
+                          <Dropdown.Item onClick={() => openModal('edition', channel.id)}>
                             Переименовать
                           </Dropdown.Item>
                         </Dropdown.Menu>
