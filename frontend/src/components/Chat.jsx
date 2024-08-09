@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
 import { useGetMessagesQuery } from '#store/apiSlice';
-import { NewMessageForm } from '#components';
+import { NewMessageForm } from '#components/forms';
 
 const getMessagesNoun = (count) => {
   switch (![11, 12, 13, 14].includes(count % 100) && count % 10) {

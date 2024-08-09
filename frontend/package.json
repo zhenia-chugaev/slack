@@ -34,6 +34,7 @@
     "#store/*": "./src/store/*",
     "#pages": "./src/pages",
     "#components": "./src/components",
+    "#components/forms": "./src/components/forms",
     "#constants": "./src/constants",
     "#utils": "./src/utils"
   },
