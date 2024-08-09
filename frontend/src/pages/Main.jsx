@@ -4,12 +4,15 @@ import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { PlusSquare } from 'react-bootstrap-icons';
 import { Chat } from '#components';
 import { useGetChannelsQuery } from '#store/apiSlice';
 
 const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
+  const [channelsStatus, setChannelsStatus] = useState('idle');
   const [activeChannel, setActiveChannel] = useState();
 
   if (isLoading) {
@@ -21,6 +24,14 @@ const Main = () => {
       </div>
     );
   }
+
+  const openModal = () => {
+    setChannelsStatus('addition');
+  };
+
+  const closeModal = () => {
+    setChannelsStatus('idle');
+  };
 
   const shouldChannelBeHighlighted = (channelId, index) => (
     (channelId === activeChannel) || (!activeChannel && index === 0)
@@ -37,8 +48,11 @@ const Main = () => {
       >
         <Row className="h-100 shadow">
           <Col as="section" className="h-100 border-end bg-light" lg={2}>
-            <div className="px-2 py-4">
+            <div className="d-flex justify-content-between align-items-center py-4 ps-2">
               <h2 className="m-0 fs-6">Каналы</h2>
+              <Button className="p-0 lh-1" variant="link" type="button" onClick={openModal}>
+                <PlusSquare size={20} />
+              </Button>
             </div>
             <Nav as="ul" className="flex-column">
               {channels.map((channel, i) => (
@@ -65,6 +79,13 @@ const Main = () => {
           </Col>
         </Row>
       </Tab.Container>
+
+      <Modal show={channelsStatus !== 'idle'} onHide={closeModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Добавить канал</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Form</Modal.Body>
+      </Modal>
     </div>
   );
 };
