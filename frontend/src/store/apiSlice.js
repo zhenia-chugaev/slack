@@ -9,6 +9,38 @@ const prepareHeaders = (headers, { getState }) => {
   return headers;
 };
 
+const subscribeToChannelsUpdates = async (_, {
+  cacheDataLoaded,
+  cacheEntryRemoved,
+  updateCachedData,
+}) => {
+  const socket = io();
+  try {
+    await cacheDataLoaded;
+    socket
+      .on('newChannel', (newChannel) => {
+        updateCachedData((channels) => {
+          channels.push(newChannel);
+        });
+      })
+      .on('removeChannel', ({ id }) => {
+        updateCachedData((channels) => (
+          channels.filter((channel) => channel.id !== id)
+        ));
+      })
+      .on('renameChannel', (renamedChannel) => {
+        updateCachedData((channels) => (
+          channels.map((channel) => (
+            channel.id === renamedChannel.id ? renamedChannel : channel
+          ))
+        ));
+      });
+  } finally {
+    await cacheEntryRemoved;
+    socket.close();
+  }
+};
+
 const subscribeToNewMessages = async (_, {
   cacheDataLoaded,
   cacheEntryRemoved,
@@ -43,6 +75,27 @@ const apiSlice = createApi({
     }),
     getChannels: builder.query({
       query: () => '/channels',
+      onCacheEntryAdded: subscribeToChannelsUpdates,
+    }),
+    addChannel: builder.mutation({
+      query: (channel) => ({
+        method: 'POST',
+        url: '/channels',
+        body: channel,
+      }),
+    }),
+    editChannel: builder.mutation({
+      query: (id, changes) => ({
+        method: 'PATCH',
+        url: `/channels/${id}`,
+        body: changes,
+      }),
+    }),
+    removeChannel: builder.mutation({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/channels/${id}`,
+      }),
     }),
     getMessages: builder.query({
       query: () => '/messages',
@@ -61,6 +114,9 @@ const apiSlice = createApi({
 export const {
   useLoginMutation,
   useGetChannelsQuery,
+  useAddChannelMutation,
+  useEditChannelMutation,
+  useRemoveChannelMutation,
   useGetMessagesQuery,
   useAddMessageMutation,
 } = apiSlice;
