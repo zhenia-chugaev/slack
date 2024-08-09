@@ -75,8 +75,8 @@ const Main = () => {
         unmountOnExit
       >
         <Row className="h-100 shadow">
-          <Col as="section" className="h-100 border-end bg-light" lg={2}>
-            <div className="d-flex justify-content-between align-items-center py-4 ps-2">
+          <Col as="section" className="h-100 d-flex flex-column pe-0 border-end bg-light" lg={2}>
+            <div className="d-flex justify-content-between align-items-center py-4 px-2">
               <h2 className="m-0 fs-6">Каналы</h2>
               <Button
                 className="p-0 lh-1"
@@ -87,14 +87,14 @@ const Main = () => {
                 <PlusSquare size={20} />
               </Button>
             </div>
-            <Nav as="ul" className="flex-column">
+            <Nav as="ul" className="flex-grow-1 flex-column flex-nowrap pb-3 pe-2 overflow-y-auto">
               {channels.map((channel, i) => (
                 <Nav.Item as="li" key={channel.id}>
                   {channel.removable
                     ? (
                       <Dropdown as={ButtonGroup} className="w-100" align="end">
                         <Button
-                          className="w-100 text-start rounded-0"
+                          className="w-100 text-start rounded-0 text-truncate"
                           variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
                           onClick={() => switchChannel(channel.id)}
                         >
@@ -117,7 +117,7 @@ const Main = () => {
                     )
                     : (
                       <Button
-                        className="w-100 text-start rounded-0"
+                        className="w-100 text-start rounded-0 text-truncate"
                         variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
                         onClick={() => switchChannel(channel.id)}
                       >
