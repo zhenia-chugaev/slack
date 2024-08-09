@@ -16,7 +16,7 @@ overrides: [
     },
   },
   {
-    files: ['src/components/ErrorBoundary.jsx'],
+    files: ['src/ErrorBoundary.jsx'],
     rules: {
       functional/no-classes: off,
     }
