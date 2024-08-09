@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import { LoginForm } from '#components';
+import { LoginForm } from '#components/forms';
 import { routes } from '#constants';
 
 const Login = () => (

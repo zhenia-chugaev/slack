@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
 import { useGetMessagesQuery } from '#store/apiSlice';
-import { NewMessageForm } from '#components';
+import { NewMessageForm } from '#components/forms';
 
 const getMessagesNoun = (count) => {
   switch (![11, 12, 13, 14].includes(count % 100) && count % 10) {
@@ -39,7 +39,7 @@ const Chat = ({ channel }) => {
         <span className="small text-muted">{messagesCount}</span>
       </div>
       <div className="flex-grow-1 d-flex flex-column pt-3 overflow-y-hidden">
-        <div className="flex-grow-1 ps-5 overflow-y-auto">
+        <div className="flex-grow-1 px-5 overflow-y-auto">
           {messages.map((msg) => (
             <blockquote className="mb-2" key={msg.id}>
               <cite className="fw-bold fst-normal">{msg.username}</cite>
