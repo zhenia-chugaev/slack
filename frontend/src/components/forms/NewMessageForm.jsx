@@ -24,7 +24,7 @@ const LoadingIndicator = () => (
 );
 
 const NewMessageForm = ({ channelId }) => {
-  const [addMessage] = useAddMessageMutation();
+  const [addMessage, { error }] = useAddMessageMutation();
   const { username } = useSelector(selectAuthData);
 
   const initialValues = {
@@ -35,24 +35,20 @@ const NewMessageForm = ({ channelId }) => {
     message: string().trim().required(),
   });
 
-  const onSubmit = async (values, { resetForm, setStatus }) => {
-    try {
-      await addMessage({ channelId, username, body: values.message }).unwrap();
-      resetForm();
-    } catch (err) {
-      const code = err.originalStatus || err.status;
-      setStatus({ code });
-    }
+  const onSubmit = async (values, { resetForm }) => {
+    await addMessage({ channelId, username, body: values.message }).unwrap();
+    resetForm();
   };
+
+  const statusCode = error?.originalStatus || error?.status;
 
   return (
     <Formik
       initialValues={initialValues}
-      initialStatus={{}}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ dirty, isValid, isSubmitting, status }) => (
+      {({ dirty, isValid, isSubmitting }) => (
         <FormikForm className="py-3 px-5">
           <Form.Group controlId="message">
             <Form.Label className="visually-hidden">Новое сообщение</Form.Label>
@@ -74,10 +70,10 @@ const NewMessageForm = ({ channelId }) => {
                 {isSubmitting ? <LoadingIndicator /> : <ArrowRightSquare color="black" size={20} />}
               </Button>
             </InputGroup>
-            {status.code && (
+            {statusCode && (
               <div className="position-relative">
                 <div className="position-absolute small text-danger">
-                  <p className="m-0">{mapStatusCodeToMessage(status.code)}</p>
+                  <p className="m-0">{mapStatusCodeToMessage(statusCode)}</p>
                 </div>
               </div>
             )}

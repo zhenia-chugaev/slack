@@ -9,7 +9,7 @@ import { mapStatusCodeToMessage } from '#utils';
 import { routes, storage } from '#constants';
 
 const LoginForm = () => {
-  const [login] = useLoginMutation();
+  const [login, { error }] = useLoginMutation();
   const navigate = useNavigate();
 
   const initialValues = {
@@ -26,27 +26,23 @@ const LoginForm = () => {
       .required("Поле 'пароль' является обязательным"),
   });
 
-  const onSubmit = async (credentials, { setStatus }) => {
-    try {
-      const data = await login(credentials).unwrap();
-      localStorage.setItem(storage.auth(), JSON.stringify(data));
-      navigate(routes.root());
-    } catch (err) {
-      const code = err.originalStatus || err.status;
-      setStatus({ code });
-    }
+  const onSubmit = async (credentials) => {
+    const data = await login(credentials).unwrap();
+    localStorage.setItem(storage.auth(), JSON.stringify(data));
+    navigate(routes.root());
   };
+
+  const statusCode = error?.originalStatus || error?.status;
 
   return (
     <Formik
       initialValues={initialValues}
-      initialStatus={{}}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting, status }) => (
+      {({ errors, touched, isSubmitting }) => (
         <FormikForm className="d-grid gap-2" noValidate>
           <FloatingLabel controlId="username" label="Ваш ник">
             <Form.Control
@@ -72,8 +68,8 @@ const LoginForm = () => {
           </Button>
           <div className="position-relative">
             <div className="position-absolute small text-danger">
-              {status.code && (
-                <p className="m-0">{mapStatusCodeToMessage(status.code)}</p>
+              {statusCode && (
+                <p className="m-0">{mapStatusCodeToMessage(statusCode)}</p>
               )}
               {Object.keys(errors).map((name) => (
                 <ErrorMessage className="m-0" component="p" name={name} key={name} />
