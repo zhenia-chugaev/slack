@@ -1,6 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
+import { SignupForm } from '#components/forms';
 
 const Signup = () => (
   <Row className="h-100 justify-content-center align-content-center">
@@ -11,7 +12,7 @@ const Signup = () => (
         </Col>
         <Col className="p-5">
           <h2 className="mb-3 h1 text-center">Регистрация</h2>
-          <div>Signup form</div>
+          <SignupForm />
         </Col>
       </Row>
     </Col>
