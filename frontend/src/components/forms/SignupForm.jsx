@@ -4,30 +4,40 @@ import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import { useLoginMutation } from '#store/apiSlice';
+import { useSignupMutation } from '#store/apiSlice';
 import { mapStatusCodeToMessage } from '#utils';
 import { routes, storage } from '#constants';
 
-const LoginForm = () => {
-  const [login, { error }] = useLoginMutation();
+const SignupForm = () => {
+  const [signup, { error }] = useSignupMutation();
   const navigate = useNavigate();
 
   const initialValues = {
     username: '',
     password: '',
+    passwordCheck: '',
   };
 
   const validationSchema = object({
     username: string()
       .trim()
-      .required("Поле 'никнейм' является обязательным"),
+      .required("Поле 'никнейм' является обязательным")
+      .min(3, "'Никнейм': от 3 до 20 символов")
+      .max(20, "'Никнейм': от 3 до 20 символов"),
     password: string()
       .trim()
-      .required("Поле 'пароль' является обязательным"),
+      .required("Поле 'пароль' является обязательным")
+      .min(6, "'Пароль': не менее 6 символов"),
+    passwordCheck: string()
+      .trim()
+      .test({
+        test: (value, { parent }) => value === parent.password,
+        message: 'Пароли должны совпадать',
+      }),
   });
 
-  const onSubmit = async (credentials) => {
-    const data = await login(credentials).unwrap();
+  const onSubmit = async ({ passwordCheck, ...credentials }) => {
+    const data = await signup(credentials).unwrap();
     localStorage.setItem(storage.auth(), JSON.stringify(data));
     navigate(routes.root());
   };
@@ -39,12 +49,11 @@ const LoginForm = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       validateOnChange={false}
-      validateOnBlur={false}
       onSubmit={onSubmit}
     >
       {({ errors, touched, isSubmitting }) => (
         <FormikForm className="d-grid gap-2" noValidate>
-          <FloatingLabel controlId="username" label="Ваш ник">
+          <FloatingLabel controlId="username" label="Имя пользователя">
             <Form.Control
               as={Field}
               type="text"
@@ -63,10 +72,19 @@ const LoginForm = () => {
               isInvalid={touched.password && errors.password}
             />
           </FloatingLabel>
+          <FloatingLabel controlId="passwordCheck" label="Подтвердите пароль">
+            <Form.Control
+              as={Field}
+              type="password"
+              name="passwordCheck"
+              placeholder="pass"
+              isInvalid={touched.passwordCheck && errors.passwordCheck}
+            />
+          </FloatingLabel>
           <Button type="submit" variant="outline-primary" size="lg" disabled={isSubmitting}>
-            Войти
+            Зарегистрироваться
           </Button>
-          <div className="position-relative">
+          <div className="position-relative pb-5">
             <div className="position-absolute small text-danger">
               {statusCode && (
                 <p className="m-0">{mapStatusCodeToMessage(statusCode)}</p>
@@ -82,4 +100,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;

@@ -79,6 +79,13 @@ const apiSlice = createApi({
         body: credentials,
       }),
     }),
+    signup: builder.mutation({
+      query: (credentials) => ({
+        method: 'POST',
+        url: '/signup',
+        body: credentials,
+      }),
+    }),
     getChannels: builder.query({
       query: () => '/channels',
       onCacheEntryAdded: subscribeToChannelsUpdates,
@@ -119,6 +126,7 @@ const apiSlice = createApi({
 
 export const {
   useLoginMutation,
+  useSignupMutation,
   useGetChannelsQuery,
   useAddChannelMutation,
   useEditChannelMutation,

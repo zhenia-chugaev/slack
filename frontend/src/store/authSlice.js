@@ -16,12 +16,19 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      apiSlice.endpoints.login.matchFulfilled,
-      (auth, { payload }) => {
-        auth.data = payload;
-      },
-    );
+    builder
+      .addMatcher(
+        apiSlice.endpoints.login.matchFulfilled,
+        (auth, { payload }) => {
+          auth.data = payload;
+        },
+      )
+      .addMatcher(
+        apiSlice.endpoints.signup.matchFulfilled,
+        (auth, { payload }) => {
+          auth.data = payload;
+        },
+      );
   },
   selectors: {
     selectAuthData: (auth) => auth.data,
