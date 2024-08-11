@@ -1,5 +1,5 @@
 export default {
   root: () => '/',
-  login: () => 'login',
-  signup: () => 'signup',
+  login: () => '/login',
+  signup: () => '/signup',
 };

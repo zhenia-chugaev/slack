@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { selectAuthData, clearAuthData } from '#store/authSlice';
-import { Main, Login, NotFound } from '#pages';
+import { Main, Login, Signup, NotFound } from '#pages';
 import { routes, storage } from '#constants';
 import ErrorBoundary from './ErrorBoundary';
 
@@ -46,6 +46,7 @@ const App = () => {
 
                   <Route element={<Protected token={token} />}>
                     <Route path={routes.login()} element={<Login />} />
+                    <Route path={routes.signup()} element={<Signup />} />
                   </Route>
 
                   <Route path="*" element={<NotFound />} />

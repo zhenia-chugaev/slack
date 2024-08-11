@@ -38,7 +38,7 @@ const Chat = ({ channel }) => {
         <h3 className="m-0 small fw-bold">{`# ${channel.name}`}</h3>
         <span className="small text-muted">{messagesCount}</span>
       </div>
-      <div className="flex-grow-1 d-flex flex-column pt-3 overflow-y-hidden">
+      <div className="flex-grow-1 d-flex flex-column pt-3 pb-2 overflow-y-hidden">
         <div className="flex-grow-1 px-5 overflow-y-auto">
           {messages.map((msg) => (
             <blockquote className="mb-2" key={msg.id}>

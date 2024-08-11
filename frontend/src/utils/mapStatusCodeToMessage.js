@@ -1,5 +1,6 @@
 const errorMessages = {
   401: 'Неверный никнейм и/или пароль',
+  409: 'Такой пользователь уже существует',
 };
 
 const mapStatusCodeToMessage = (statusCode) => {
