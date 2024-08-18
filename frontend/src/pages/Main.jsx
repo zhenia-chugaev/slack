@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
@@ -33,12 +34,13 @@ const Main = () => {
   const { data: channels = [], isLoading } = useGetChannelsQuery();
   const { activeChannel, status } = useSelector(selectChannelsInfo);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <div className="h-100 d-flex justify-content-center align-items-center">
         <Spinner animation="border" variant="primary" role="status">
-          <span className="visually-hidden">Загрузка...</span>
+          <span className="visually-hidden">{t('statuses.loading')}</span>
         </Spinner>
       </div>
     );
@@ -77,7 +79,7 @@ const Main = () => {
         <Row className="h-100 shadow">
           <Col as="section" className="h-100 d-flex flex-column pe-0 border-end bg-light" lg={2}>
             <div className="d-flex justify-content-between align-items-center py-4 px-2">
-              <h2 className="m-0 fs-6">Каналы</h2>
+              <h2 className="m-0 fs-6">{t('channels.title')}</h2>
               <Button
                 className="p-0 lh-1"
                 variant="link"
@@ -107,10 +109,10 @@ const Main = () => {
                         />
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={() => openModal('removal', channel.id)}>
-                            Удалить
+                            {t('buttons.removeChannel')}
                           </Dropdown.Item>
                           <Dropdown.Item onClick={() => openModal('edition', channel.id)}>
-                            Переименовать
+                            {t('buttons.editChannel')}
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
