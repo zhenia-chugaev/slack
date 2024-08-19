@@ -1,14 +1,15 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useAddChannelMutation } from '#store/apiSlice';
-import { mapStatusCodeToMessage } from '#utils';
 
 const AddChannelForm = ({ onSuccess, onReset }) => {
   const { data: channels } = useGetChannelsQuery();
   const [addChannel] = useAddChannelMutation();
+  const { t } = useTranslation();
 
   const initialValues = {
     name: '',
@@ -22,10 +23,10 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
   const validationSchema = object({
     name: string()
       .trim()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .notOneOf(existingChannelNames, 'Должно быть уникальным'),
+      .required('forms.addChannel.fields.name.errors.required')
+      .min(3, 'forms.addChannel.fields.name.errors.min')
+      .max(20, 'forms.addChannel.fields.name.errors.max')
+      .notOneOf(existingChannelNames, 'forms.addChannel.fields.name.errors.notUnique'),
   });
 
   const onSubmit = async (channel, { setStatus }) => {
@@ -50,7 +51,9 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
       {({ errors, touched, isSubmitting, status }) => (
         <FormikForm onReset={onReset} noValidate>
           <Form.Group className="mb-2" controlId="channelName">
-            <Form.Label className="visually-hidden">Channel name</Form.Label>
+            <Form.Label className="visually-hidden">
+              {t('forms.addChannel.fields.name.label')}
+            </Form.Label>
             <Form.Control
               as={Field}
               className="mb-1"
@@ -60,17 +63,23 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
               autoFocus
             />
             <Form.Control.Feedback className="mt-0" type="invalid">
-              <ErrorMessage className="m-0" component="p" name="name" />
+              <ErrorMessage name="name">
+                {(key) => <p className="m-0">{t(key)}</p>}
+              </ErrorMessage>
             </Form.Control.Feedback>
             {status.code && (
               <div className="small text-danger">
-                <p className="m-0">{mapStatusCodeToMessage(status.code)}</p>
+                <p className="m-0">{t([`errors.${status.code}`, 'errors.default'])}</p>
               </div>
             )}
           </Form.Group>
           <div className="d-flex gap-2 justify-content-end">
-            <Button type="reset" variant="secondary">Отменить</Button>
-            <Button type="submit" disabled={isSubmitting}>Отправить</Button>
+            <Button type="reset" variant="secondary">
+              {t('forms.addChannel.reset')}
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {t('forms.addChannel.submit')}
+            </Button>
           </div>
         </FormikForm>
       )}

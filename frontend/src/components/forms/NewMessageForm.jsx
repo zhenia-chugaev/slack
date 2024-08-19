@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
@@ -8,24 +9,27 @@ import Spinner from 'react-bootstrap/Spinner';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useAddMessageMutation } from '#store/apiSlice';
 import { selectAuthData } from '#store/authSlice';
-import { mapStatusCodeToMessage } from '#utils';
 
-const LoadingIndicator = () => (
-  <Spinner
-    as="span"
-    animation="border"
-    variant="secondary"
-    size="sm"
-    role="status"
-    aria-hidden="true"
-  >
-    <span className="visually-hidden">Загрузка...</span>
-  </Spinner>
-);
+const LoadingIndicator = () => {
+  const { t } = useTranslation();
+  return (
+    <Spinner
+      as="span"
+      animation="border"
+      variant="secondary"
+      size="sm"
+      role="status"
+      aria-hidden="true"
+    >
+      <span className="visually-hidden">{t('statuses.loading')}</span>
+    </Spinner>
+  );
+};
 
 const NewMessageForm = ({ channelId }) => {
   const [addMessage, { error }] = useAddMessageMutation();
   const { username } = useSelector(selectAuthData);
+  const { t } = useTranslation();
 
   const initialValues = {
     message: '',
@@ -51,13 +55,15 @@ const NewMessageForm = ({ channelId }) => {
       {({ dirty, isValid, isSubmitting }) => (
         <FormikForm className="py-3 px-5">
           <Form.Group controlId="message">
-            <Form.Label className="visually-hidden">Новое сообщение</Form.Label>
+            <Form.Label className="visually-hidden">
+              {t('forms.chat.fields.msg.label')}
+            </Form.Label>
             <InputGroup className="mb-2">
               <Form.Control
                 as={Field}
                 type="text"
                 name="message"
-                placeholder="Введите сообщение..."
+                placeholder={t('forms.chat.fields.msg.label')}
                 autoComplete="off"
                 autoFocus
               />
@@ -73,7 +79,7 @@ const NewMessageForm = ({ channelId }) => {
             {statusCode && (
               <div className="position-relative">
                 <div className="position-absolute small text-danger">
-                  <p className="m-0">{mapStatusCodeToMessage(statusCode)}</p>
+                  <p className="m-0">{t([`errors.${statusCode}`, 'errors.default'])}</p>
                 </div>
               </div>
             )}

@@ -1,20 +1,8 @@
 import { useMemo } from 'react';
 import { createSelector } from '@reduxjs/toolkit';
+import { useTranslation } from 'react-i18next';
 import { useGetMessagesQuery } from '#store/apiSlice';
 import { NewMessageForm } from '#components/forms';
-
-const getMessagesNoun = (count) => {
-  switch (![11, 12, 13, 14].includes(count % 100) && count % 10) {
-    case 1:
-      return 'сообщение';
-    case 2:
-    case 3:
-    case 4:
-      return 'сообщения';
-    default:
-      return 'сообщений';
-  }
-};
 
 const Chat = ({ channel }) => {
   const selectMessagesByChannel = useMemo(() => createSelector(
@@ -30,7 +18,9 @@ const Chat = ({ channel }) => {
     }),
   });
 
-  const messagesCount = `${messages.length} ${getMessagesNoun(messages.length)}`;
+  const { t } = useTranslation();
+
+  const messagesCount = t('messages.count', { count: messages.length });
 
   return (
     <div className="d-flex flex-column h-100">
