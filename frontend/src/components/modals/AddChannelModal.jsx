@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import Modal from 'react-bootstrap/Modal';
 import { AddChannelForm } from '#components/forms';
 
 const AddChannelModal = ({ switchChannel, closeModal }) => {
+  const { t } = useTranslation();
+
   const onSuccess = (channel) => {
     switchChannel(channel.id);
     closeModal();
@@ -16,7 +19,7 @@ const AddChannelModal = ({ switchChannel, closeModal }) => {
       show
     >
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <AddChannelForm onSuccess={onSuccess} onReset={closeModal} />

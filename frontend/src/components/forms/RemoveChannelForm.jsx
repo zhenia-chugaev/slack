@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import Button from 'react-bootstrap/Button';
 import { useRemoveChannelMutation } from '#store/apiSlice';
-import { mapStatusCodeToMessage } from '#utils';
 
 const RemoveChannelForm = ({ channelId, onSuccess, onReset }) => {
   const [removeChannel] = useRemoveChannelMutation();
+  const { t } = useTranslation();
 
   const onSubmit = async (_, { setStatus }) => {
     try {
@@ -22,12 +23,16 @@ const RemoveChannelForm = ({ channelId, onSuccess, onReset }) => {
         <Form onReset={onReset}>
           {status.code && (
             <div className="small text-danger">
-              <p className="m-0">{mapStatusCodeToMessage(status.code)}</p>
+              <p className="m-0">{t([`errors.${status.code}`, 'errors.default'])}</p>
             </div>
           )}
           <div className="d-flex gap-2 justify-content-end mt-3">
-            <Button type="reset" variant="secondary">Отменить</Button>
-            <Button type="submit" variant="danger" disabled={isSubmitting}>Удалить</Button>
+            <Button type="reset" variant="secondary">
+              {t('forms.removeChannel.reset')}
+            </Button>
+            <Button type="submit" variant="danger" disabled={isSubmitting}>
+              {t('forms.removeChannel.submit')}
+            </Button>
           </div>
         </Form>
       )}

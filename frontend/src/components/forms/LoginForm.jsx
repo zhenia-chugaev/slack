@@ -1,16 +1,17 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import { useLoginMutation } from '#store/apiSlice';
-import { mapStatusCodeToMessage } from '#utils';
 import { routes, storage } from '#constants';
 
 const LoginForm = () => {
   const [login, { error }] = useLoginMutation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const initialValues = {
     username: '',
@@ -20,10 +21,10 @@ const LoginForm = () => {
   const validationSchema = object({
     username: string()
       .trim()
-      .required("Поле 'никнейм' является обязательным"),
+      .required('forms.logIn.fields.name.errors.required'),
     password: string()
       .trim()
-      .required("Поле 'пароль' является обязательным"),
+      .required('forms.logIn.fields.pass.errors.required'),
   });
 
   const onSubmit = async (credentials) => {
@@ -44,7 +45,7 @@ const LoginForm = () => {
     >
       {({ errors, touched, isSubmitting }) => (
         <FormikForm className="d-grid gap-2" noValidate>
-          <FloatingLabel controlId="username" label="Ваш ник">
+          <FloatingLabel controlId="username" label={t('forms.logIn.fields.name.label')}>
             <Form.Control
               as={Field}
               type="text"
@@ -54,7 +55,7 @@ const LoginForm = () => {
               autoFocus
             />
           </FloatingLabel>
-          <FloatingLabel controlId="password" label="Пароль">
+          <FloatingLabel controlId="password" label={t('forms.logIn.fields.pass.label')}>
             <Form.Control
               as={Field}
               type="password"
@@ -64,15 +65,17 @@ const LoginForm = () => {
             />
           </FloatingLabel>
           <Button type="submit" variant="outline-primary" size="lg" disabled={isSubmitting}>
-            Войти
+            {t('forms.logIn.submit')}
           </Button>
           <div className="position-relative">
             <div className="position-absolute small text-danger">
               {statusCode && (
-                <p className="m-0">{mapStatusCodeToMessage(statusCode)}</p>
+                <p className="m-0">{t([`errors.${statusCode}`, 'errors.default'])}</p>
               )}
               {Object.keys(errors).map((name) => (
-                <ErrorMessage className="m-0" component="p" name={name} key={name} />
+                <ErrorMessage name={name} key={name}>
+                  {(key) => <p className="m-0">{t(key)}</p>}
+                </ErrorMessage>
               ))}
             </div>
           </div>

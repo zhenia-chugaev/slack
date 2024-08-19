@@ -2,6 +2,7 @@ import {
   BrowserRouter, Routes, Route, Link, Navigate, Outlet,
 } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
@@ -16,6 +17,7 @@ const Protected = ({ token }) => (token ? <Navigate to={routes.root()} /> : <Out
 const App = () => {
   const { token } = useSelector(selectAuthData);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const logOut = () => {
     localStorage.removeItem(storage.auth());
@@ -30,9 +32,13 @@ const App = () => {
             <Container>
               <Navbar>
                 <Navbar.Brand as={Link} to={routes.root()}>
-                  <h1 style={{ all: 'unset' }}>Slack</h1>
+                  <h1 style={{ all: 'unset' }}>{t('brandName')}</h1>
                 </Navbar.Brand>
-                {token && <Button className="ms-auto" onClick={logOut}>Выйти</Button>}
+                {token && (
+                  <Button className="ms-auto" onClick={logOut}>
+                    {t('buttons.logOut')}
+                  </Button>
+                )}
               </Navbar>
             </Container>
           </header>
