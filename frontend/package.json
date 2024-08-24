@@ -33,15 +33,7 @@
     "eject": "react-scripts eject"
   },
   "imports": {
-    "#store": "./src/store",
-    "#store/*": "./src/store/*",
-    "#locales": "./src/locales",
-    "#pages": "./src/pages",
-    "#components": "./src/components",
-    "#components/*": "./src/components/*",
-    "#constants": "./src/constants",
-    "#utils": "./src/utils",
-    "#*": "./src/*.js"
+    "#*": "./src/*"
   },
   "browserslist": {
     "production": [
