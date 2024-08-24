@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useAddChannelMutation } from '#store/apiSlice';
 
-const AddChannelForm = ({ onSuccess, onReset }) => {
+const AddChannelForm = ({ onReset, onSuccess, onFailure }) => {
   const { data: channels } = useGetChannelsQuery();
   const [addChannel] = useAddChannelMutation();
   const { t } = useTranslation();
@@ -29,26 +29,24 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
       .notOneOf(existingChannelNames, 'forms.addChannel.fields.name.errors.notUnique'),
   });
 
-  const onSubmit = async (channel, { setStatus }) => {
+  const onSubmit = async (channel) => {
     try {
       const result = await addChannel(channel).unwrap();
       onSuccess(result);
     } catch (err) {
-      const code = err.originalStatus || err.status;
-      setStatus({ code });
+      onFailure(err);
     }
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      initialStatus={{}}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting, status }) => (
+      {({ errors, touched, isSubmitting }) => (
         <FormikForm onReset={onReset} noValidate>
           <Form.Group className="mb-2" controlId="channelName">
             <Form.Label className="visually-hidden">
@@ -67,11 +65,6 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
                 {(key) => <p className="m-0">{t(key)}</p>}
               </ErrorMessage>
             </Form.Control.Feedback>
-            {status.code && (
-              <div className="small text-danger">
-                <p className="m-0">{t([`errors.${status.code}`, 'errors.default'])}</p>
-              </div>
-            )}
           </Form.Group>
           <div className="d-flex gap-2 justify-content-end">
             <Button type="reset" variant="secondary">

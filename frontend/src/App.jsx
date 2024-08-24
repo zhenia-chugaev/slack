@@ -8,6 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { selectAuthData, clearAuthData } from '#store/authSlice';
 import { Main, Login, Signup, NotFound } from '#pages';
+import { ToastBox } from '#components';
 import { routes, storage } from '#constants';
 import ErrorBoundary from './ErrorBoundary';
 
@@ -60,6 +61,7 @@ const App = () => {
               </ErrorBoundary>
             </Container>
           </main>
+          <ToastBox />
         </div>
       </BrowserRouter>
     </ErrorBoundary>

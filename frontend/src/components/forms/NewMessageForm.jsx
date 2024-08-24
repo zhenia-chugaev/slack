@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import { object, string } from 'yup';
+import { toast } from 'react-toastify';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
@@ -27,7 +28,7 @@ const LoadingIndicator = () => {
 };
 
 const NewMessageForm = ({ channelId }) => {
-  const [addMessage, { error }] = useAddMessageMutation();
+  const [addMessage] = useAddMessageMutation();
   const { username } = useSelector(selectAuthData);
   const { t } = useTranslation();
 
@@ -40,11 +41,15 @@ const NewMessageForm = ({ channelId }) => {
   });
 
   const onSubmit = async (values, { resetForm }) => {
-    await addMessage({ channelId, username, body: values.message }).unwrap();
-    resetForm();
+    try {
+      await addMessage({ channelId, username, body: values.message }).unwrap();
+      resetForm();
+    } catch (err) {
+      const code = err.originalStatus || err.status;
+      const message = t([`errors.${code}`, 'errors.default']);
+      toast.error(message);
+    }
   };
-
-  const statusCode = error?.originalStatus || error?.status;
 
   return (
     <Formik
@@ -76,13 +81,6 @@ const NewMessageForm = ({ channelId }) => {
                 {isSubmitting ? <LoadingIndicator /> : <ArrowRightSquare color="black" size={20} />}
               </Button>
             </InputGroup>
-            {statusCode && (
-              <div className="position-relative">
-                <div className="position-absolute small text-danger">
-                  <p className="m-0">{t([`errors.${statusCode}`, 'errors.default'])}</p>
-                </div>
-              </div>
-            )}
           </Form.Group>
         </FormikForm>
       )}

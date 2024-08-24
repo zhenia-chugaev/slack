@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import apiSlice from './apiSlice';
 import authSlice from './authSlice';
 import channelsSlice from './channelsSlice';
+import { showQueryError } from './middlewares';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => [
     ...getDefaultMiddleware(),
     apiSlice.middleware,
+    showQueryError,
   ],
 });
 

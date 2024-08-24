@@ -20,4 +20,6 @@ const getI18nextInstance = () => {
   return i18next;
 };
 
-export default getI18nextInstance;
+const i18next = getI18nextInstance();
+
+export default i18next;

@@ -15,13 +15,16 @@ export default {
     modals: {
       addChannel: {
         title: 'Добавить канал',
+        success: 'Канал создан',
       },
       editChannel: {
         title: 'Переименовать канал',
+        success: 'Канал переименован',
       },
       removeChannel: {
         title: 'Удалить канал',
         body: 'Уверены?',
+        success: 'Канал удалён',
       },
     },
     forms: {

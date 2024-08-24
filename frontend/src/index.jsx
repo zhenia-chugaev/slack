@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import store from '#store';
-import getI18nextInstance from './i18n';
+import i18next from './i18n';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <I18nextProvider i18n={getI18nextInstance()}>
+      <I18nextProvider i18n={i18next}>
         <App />
       </I18nextProvider>
     </Provider>
