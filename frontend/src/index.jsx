@@ -6,6 +6,7 @@ import store from '#store';
 import getI18nextInstance from './i18n';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
