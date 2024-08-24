@@ -2,12 +2,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
-import { toast } from 'react-toastify';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useEditChannelMutation } from '#store/apiSlice';
 
-const EditChannelForm = ({ channel, onSuccess, onReset }) => {
+const EditChannelForm = ({ channel, onReset, onSuccess, onFailure }) => {
   const { data: channels } = useGetChannelsQuery();
   const [editChannel] = useEditChannelMutation();
   const { t } = useTranslation();
@@ -38,9 +37,7 @@ const EditChannelForm = ({ channel, onSuccess, onReset }) => {
       const result = await editChannel({ id: channel.id, changes }).unwrap();
       onSuccess(result);
     } catch (err) {
-      const code = err.originalStatus || err.status;
-      const message = t([`errors.${code}`, 'errors.default']);
-      toast.error(message);
+      onFailure(err);
     }
   };
 

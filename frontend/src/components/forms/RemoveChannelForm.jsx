@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
-import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import { useRemoveChannelMutation } from '#store/apiSlice';
 
-const RemoveChannelForm = ({ channelId, onSuccess, onReset }) => {
+const RemoveChannelForm = ({ channelId, onReset, onSuccess, onFailure }) => {
   const [removeChannel] = useRemoveChannelMutation();
   const { t } = useTranslation();
 
@@ -13,9 +12,7 @@ const RemoveChannelForm = ({ channelId, onSuccess, onReset }) => {
       const result = await removeChannel(channelId).unwrap();
       onSuccess(result);
     } catch (err) {
-      const code = err.originalStatus || err.status;
-      const message = t([`errors.${code}`, 'errors.default']);
-      toast.error(message);
+      onFailure(err);
     }
   };
 

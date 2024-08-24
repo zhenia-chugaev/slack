@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import Modal from 'react-bootstrap/Modal';
 import { AddChannelForm } from '#components/forms';
 
@@ -6,8 +7,16 @@ const AddChannelModal = ({ switchChannel, closeModal }) => {
   const { t } = useTranslation();
 
   const onSuccess = (channel) => {
+    const message = t('modals.addChannel.success');
+    toast.success(message);
     switchChannel(channel.id);
     closeModal();
+  };
+
+  const onFailure = (error) => {
+    const code = error.originalStatus || error.status;
+    const message = t([`errors.${code}`, 'errors.default']);
+    toast.error(message);
   };
 
   return (
@@ -22,7 +31,11 @@ const AddChannelModal = ({ switchChannel, closeModal }) => {
         <Modal.Title>{t('modals.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <AddChannelForm onSuccess={onSuccess} onReset={closeModal} />
+        <AddChannelForm
+          onReset={closeModal}
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+        />
       </Modal.Body>
     </Modal>
   );
