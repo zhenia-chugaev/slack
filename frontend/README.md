@@ -9,5 +9,5 @@ $ npm run lint:fix # fixes linter issues
 ```
 
 ```shell
-$ npm run build # bundles app code for production
+$ npm run build # bundles application code for production
 ```
