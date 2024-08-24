@@ -40,7 +40,8 @@
     "#components": "./src/components",
     "#components/*": "./src/components/*",
     "#constants": "./src/constants",
-    "#utils": "./src/utils"
+    "#utils": "./src/utils",
+    "#*": "./src/*.js"
   },
   "browserslist": {
     "production": [

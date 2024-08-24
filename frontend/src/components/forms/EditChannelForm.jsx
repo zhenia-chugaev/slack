@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
+import { toast } from 'react-toastify';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useEditChannelMutation } from '#store/apiSlice';
@@ -32,26 +33,26 @@ const EditChannelForm = ({ channel, onSuccess, onReset }) => {
       .notOneOf(existingChannelNames, 'forms.editChannel.fields.name.errors.notUnique'),
   });
 
-  const onSubmit = async (changes, { setStatus }) => {
+  const onSubmit = async (changes) => {
     try {
       const result = await editChannel({ id: channel.id, changes }).unwrap();
       onSuccess(result);
     } catch (err) {
       const code = err.originalStatus || err.status;
-      setStatus({ code });
+      const message = t([`errors.${code}`, 'errors.default']);
+      toast.error(message);
     }
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      initialStatus={{}}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting, status }) => (
+      {({ errors, touched, isSubmitting }) => (
         <FormikForm onReset={onReset} noValidate>
           <Form.Group className="mb-2" controlId="channelName">
             <Form.Label className="visually-hidden">
@@ -71,11 +72,6 @@ const EditChannelForm = ({ channel, onSuccess, onReset }) => {
                 {(key) => <p className="m-0">{t(key)}</p>}
               </ErrorMessage>
             </Form.Control.Feedback>
-            {status.code && (
-              <div className="small text-danger">
-                <p className="m-0">{t([`errors.${status.code}`, 'errors.default'])}</p>
-              </div>
-            )}
           </Form.Group>
           <div className="d-flex gap-2 justify-content-end">
             <Button type="reset" variant="secondary">

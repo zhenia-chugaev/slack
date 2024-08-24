@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form as FormikForm, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
+import { toast } from 'react-toastify';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useAddChannelMutation } from '#store/apiSlice';
@@ -29,26 +30,26 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
       .notOneOf(existingChannelNames, 'forms.addChannel.fields.name.errors.notUnique'),
   });
 
-  const onSubmit = async (channel, { setStatus }) => {
+  const onSubmit = async (channel) => {
     try {
       const result = await addChannel(channel).unwrap();
       onSuccess(result);
     } catch (err) {
       const code = err.originalStatus || err.status;
-      setStatus({ code });
+      const message = t([`errors.${code}`, 'errors.default']);
+      toast.error(message);
     }
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      initialStatus={{}}
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting, status }) => (
+      {({ errors, touched, isSubmitting }) => (
         <FormikForm onReset={onReset} noValidate>
           <Form.Group className="mb-2" controlId="channelName">
             <Form.Label className="visually-hidden">
@@ -67,11 +68,6 @@ const AddChannelForm = ({ onSuccess, onReset }) => {
                 {(key) => <p className="m-0">{t(key)}</p>}
               </ErrorMessage>
             </Form.Control.Feedback>
-            {status.code && (
-              <div className="small text-danger">
-                <p className="m-0">{t([`errors.${status.code}`, 'errors.default'])}</p>
-              </div>
-            )}
           </Form.Group>
           <div className="d-flex gap-2 justify-content-end">
             <Button type="reset" variant="secondary">
