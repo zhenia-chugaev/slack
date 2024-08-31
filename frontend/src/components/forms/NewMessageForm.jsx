@@ -10,6 +10,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useAddMessageMutation } from '#store/apiSlice';
 import { selectAuthData } from '#store/authSlice';
+import { filter } from '#helpers';
 
 const LoadingIndicator = () => {
   const { t } = useTranslation();
@@ -42,7 +43,8 @@ const NewMessageForm = ({ channelId }) => {
 
   const onSubmit = async (values, { resetForm }) => {
     try {
-      await addMessage({ channelId, username, body: values.message }).unwrap();
+      const message = { channelId, username, body: filter.clean(values.message) };
+      await addMessage(message).unwrap();
       resetForm();
     } catch (err) {
       const code = err.originalStatus || err.status;

@@ -5,6 +5,7 @@ import { object, string } from 'yup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useGetChannelsQuery, useAddChannelMutation } from '#store/apiSlice';
+import { filter } from '#helpers';
 
 const AddChannelForm = ({ onReset, onSuccess, onFailure }) => {
   const { data: channels } = useGetChannelsQuery();
@@ -29,8 +30,9 @@ const AddChannelForm = ({ onReset, onSuccess, onFailure }) => {
       .notOneOf(existingChannelNames, 'forms.addChannel.fields.name.errors.notUnique'),
   });
 
-  const onSubmit = async (channel) => {
+  const onSubmit = async (values) => {
     try {
+      const channel = { name: filter.clean(values.name) };
       const result = await addChannel(channel).unwrap();
       onSuccess(result);
     } catch (err) {
