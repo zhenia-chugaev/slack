@@ -22,11 +22,6 @@ const Chat = ({ channel }) => {
 
   const messagesCount = t('messages.count', { count: messages.length });
 
-  if (Math.random() > 0.5) {
-    const a = null;
-    a.hello();
-  }
-
   return (
     <div className="d-flex flex-column h-100">
       <div className="p-3 bg-light border-bottom">
