@@ -106,7 +106,9 @@ const Main = () => {
                           id={`${channel.name}-dropdown-toggle`}
                           variant={shouldChannelBeHighlighted(channel.id, i) ? 'secondary' : 'light'}
                           split
-                        />
+                        >
+                          <span className="visually-hidden">{t('buttons.channelMenu')}</span>
+                        </Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={() => openModal('removal', channel.id)}>
                             {t('buttons.removeChannel')}
