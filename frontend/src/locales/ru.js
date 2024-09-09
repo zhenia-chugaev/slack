@@ -115,6 +115,7 @@ export default {
             label: 'Введите сообщение...',
           },
         },
+        submit: 'Отправить',
       },
     },
     buttons: {
@@ -123,6 +124,7 @@ export default {
       goBack: 'Назад',
       editChannel: 'Переименовать',
       removeChannel: 'Удалить',
+      channelMenu: 'Управление каналом',
     },
     errors: {
       401: 'Неверный никнейм и/или пароль',
