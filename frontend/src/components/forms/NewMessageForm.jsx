@@ -80,6 +80,7 @@ const NewMessageForm = ({ channelId }) => {
                 variant="outline-secondary"
                 disabled={!dirty || !isValid || isSubmitting}
               >
+                <span className="visually-hidden">{t('forms.chat.submit')}</span>
                 {isSubmitting ? <LoadingIndicator /> : <ArrowRightSquare color="black" size={20} />}
               </Button>
             </InputGroup>
